@@ -15,7 +15,7 @@ trait Classification {
 }
 
 case object Equilateral extends Classification {
-  override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => (a == b) && (b == c)})
+  override val qualifies = (a: Int, b: Int, c: Int) => (a == b) && (b == c)
 }
 case object NotATriangle extends Classification {
   override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => (a + b) < c})
