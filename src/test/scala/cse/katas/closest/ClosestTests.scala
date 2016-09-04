@@ -34,4 +34,16 @@ class ClosestTests extends path.FunSpec {
       }
     }
   }
+
+  describe ("An empty list") {
+    val input: List[Int] = Nil
+
+    describe ("searched for the element closest to zero") {
+      val result = Closest.closestToZero (input)
+
+      it ("produces no result") {
+        assert (result === None)
+      }
+    }
+  }
 }
