@@ -13,6 +13,10 @@ class TrianglesTests extends path.FunSpec {
     inAllOrders (5, 5, 4, Isosceles)
   }
 
+  describe ("Two segments whose squares add to the square of the third") {
+    inAllOrders (6, 8, 10, Right)
+  }
+
   private def inOneOrder (msg: String, a: Int, b: Int, c: Int, expected: Classification): Unit = {
     describe (s"$msg ($a, $b, $c)") {
       val result = Triangles.classifySegments (a, b, c)

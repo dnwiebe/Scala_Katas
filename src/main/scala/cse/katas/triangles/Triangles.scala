@@ -21,7 +21,7 @@ case object Isosceles extends Classification {
   override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => a == b})
 }
 case object Right extends Classification {
-  override val qualifies = (a: Int, b: Int, c: Int) => false
+  override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => (a*a) + (b*b) == (c*c)})
 }
 case object Other extends Classification {
   override val qualifies = (a: Int, b: Int, c: Int) => false
