@@ -5,35 +5,35 @@ package cse.katas.triangles
   */
 
 trait Classification {
-  def qualifies (a: Int, b: Int, c: Int): Boolean
+  val qualifies: (Int, Int, Int) => Boolean
 
   private val ORDERS = List ((0, 1, 2), (1, 2, 0), (2, 0, 1), (2, 1, 0), (1, 0, 2), (0, 2, 1))
-  protected def rotate (a: Int, b: Int, c: Int, closure: (Int, Int, Int) => Boolean): Boolean = {
+  protected val rotate: (Int, Int, Int, (Int, Int, Int) => Boolean) => Boolean = (a, b, c, closure) => {
     val argArray = Array (a, b, c)
     ORDERS.exists {order => closure (argArray (order._1), argArray (order._2), argArray (order._3))}
   }
 }
 
 case object Equilateral extends Classification {
-  override def qualifies (a: Int, b: Int, c: Int): Boolean = rotate (a, b, c, {(a, b, c) => (a == b) && (b == c)})
+  override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => (a == b) && (b == c)})
 }
 case object Isosceles extends Classification {
-  override def qualifies (a: Int, b: Int, c: Int): Boolean = rotate (a, b, c, {(a, b, c) => a == b})
+  override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => a == b})
 }
 case object Right extends Classification {
-  override def qualifies (a: Int, b: Int, c: Int): Boolean = false
+  override val qualifies = (a: Int, b: Int, c: Int) => false
 }
 case object Other extends Classification {
-  override def qualifies (a: Int, b: Int, c: Int): Boolean = false
+  override val qualifies = (a: Int, b: Int, c: Int) => false
 }
 case object NotATriangle extends Classification {
-  override def qualifies (a: Int, b: Int, c: Int): Boolean = false
+  override val qualifies = (a: Int, b: Int, c: Int) => false
 }
 
 object Triangles {
   private val CLASSIFICATION_SEQUENCE = List (Equilateral, Isosceles, Right, Other)
 
-  def classifySegments (a: Int, b: Int, c: Int): Classification = {
+  val classifySegments: (Int, Int, Int) => Classification = (a, b, c) => {
     CLASSIFICATION_SEQUENCE.find {triangleType => triangleType.qualifies (a, b, c)} match {
       case Some (triangleType) => triangleType
       case None => NotATriangle
