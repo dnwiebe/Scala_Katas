@@ -6,6 +6,6 @@ package cse.katas.closest
 object Closest {
 
   val closestToZero: List[Int] => Option[Int] = numbers => {
-    None
+    Some (numbers.head)
   }
 }
