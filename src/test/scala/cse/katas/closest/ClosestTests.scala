@@ -11,50 +11,19 @@ import org.scalatest.path
   */
 class ClosestTests extends path.FunSpec {
 
-  describe ("A list containing just one value") {
-    val input = List (-10)
+  check ("A list containing just one value", List (-10), "produces that one value", Some (-10))
+  check ("A list containing several positive values", List (5, 2, 8, 4, 7, 1), "produces the smallest positive value", Some (1))
+  check ("An empty list", Nil, "produces no result", None)
+  check ("A list containing several negative values", List (-5, -2, -8, -4, -7, -1), "produces the greatest negative value", Some (-1))
 
-    describe ("searched for the element closest to zero") {
-      val result = Closest.closestToZero (input)
+  private def check (inMsg: String, input: List[Int], outMsg: String, expected: Option[Int]) = {
+    describe (inMsg) {
+      describe ("searched for the element closest to zero") {
+        val result = Closest.closestToZero (input)
 
-      it ("produces that one value") {
-        assert (result === Some (-10))
-      }
-    }
-  }
-
-  describe ("A list containing several positive values") {
-    val input = List (5, 2, 8, 4, 7, 1)
-
-    describe ("searched for the element closest to zero") {
-      val result = Closest.closestToZero (input)
-
-      it ("produces the smallest positive value") {
-        assert (result === Some (1))
-      }
-    }
-  }
-
-  describe ("An empty list") {
-    val input: List[Int] = Nil
-
-    describe ("searched for the element closest to zero") {
-      val result = Closest.closestToZero (input)
-
-      it ("produces no result") {
-        assert (result === None)
-      }
-    }
-  }
-
-  describe ("A list containing several negative values") {
-    val input = List (-5, -2, -8, -4, -7, -1)
-
-    describe ("searched for the element closest to zero") {
-      val result = Closest.closestToZero (input)
-
-      it ("produces the greatest negative value") {
-        assert (result === Some (-1))
+        it (outMsg) {
+          assert (result === expected)
+        }
       }
     }
   }
