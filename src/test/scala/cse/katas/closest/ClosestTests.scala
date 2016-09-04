@@ -46,4 +46,16 @@ class ClosestTests extends path.FunSpec {
       }
     }
   }
+
+  describe ("A list containing several negative values") {
+    val input = List (-5, -2, -8, -4, -7, -1)
+
+    describe ("searched for the element closest to zero") {
+      val result = Closest.closestToZero (input)
+
+      it ("produces the greatest negative value") {
+        assert (result === Some (-1))
+      }
+    }
+  }
 }
