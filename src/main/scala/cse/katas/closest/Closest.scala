@@ -14,7 +14,7 @@ object Closest {
       case (None, None) => None
       case (p, None) => p
       case (None, n) => n
-      case (Some (p), Some (n)) => if (p < -n) {Some (p)} else {Some (n)}
+      case (Some (p), Some (n)) => if (-n < p) {Some (n)} else {Some (p)}
     }
   }
 }
