@@ -17,6 +17,14 @@ class TrianglesTests extends path.FunSpec {
     inAllOrders (6, 8, 10, Right)
   }
 
+  describe ("Three segments that don't fit any classification except that they make a triangle") {
+    inAllOrders (10, 11, 12, Other)
+  }
+
+  describe ("One segment that's longer than the sum of the other two") {
+    inAllOrders (5, 5, 12, NotATriangle)
+  }
+
   private def inOneOrder (msg: String, a: Int, b: Int, c: Int, expected: Classification): Unit = {
     describe (s"$msg ($a, $b, $c)") {
       val result = Triangles.classifySegments (a, b, c)

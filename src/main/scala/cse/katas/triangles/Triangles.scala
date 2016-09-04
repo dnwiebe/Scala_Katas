@@ -17,6 +17,9 @@ trait Classification {
 case object Equilateral extends Classification {
   override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => (a == b) && (b == c)})
 }
+case object NotATriangle extends Classification {
+  override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => (a + b) < c})
+}
 case object Isosceles extends Classification {
   override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => a == b})
 }
@@ -24,19 +27,16 @@ case object Right extends Classification {
   override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => (a*a) + (b*b) == (c*c)})
 }
 case object Other extends Classification {
-  override val qualifies = (a: Int, b: Int, c: Int) => false
-}
-case object NotATriangle extends Classification {
-  override val qualifies = (a: Int, b: Int, c: Int) => false
+  override val qualifies = (a: Int, b: Int, c: Int) => true
 }
 
 object Triangles {
-  private val CLASSIFICATION_SEQUENCE = List (Equilateral, Isosceles, Right, Other)
+  private val CLASSIFICATION_SEQUENCE = List (Equilateral, NotATriangle, Isosceles, Right)
 
   val classifySegments: (Int, Int, Int) => Classification = (a, b, c) => {
     CLASSIFICATION_SEQUENCE.find {triangleType => triangleType.qualifies (a, b, c)} match {
       case Some (triangleType) => triangleType
-      case None => NotATriangle
+      case None => Other
     }
   }
 }
