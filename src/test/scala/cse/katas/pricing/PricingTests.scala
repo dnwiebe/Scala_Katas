@@ -21,14 +21,22 @@ import org.scalatest.path
 
 class PricingTests extends path.FunSpec {
 
-  describe ("$20.00 worth of food") {
-    val merchandise = List (Item (500, Food), Item (1500, Food))
+  check ("$99.99 worth of food", List (Item (3333, Food), Item (3333, Food), Item (3333, Food)), 9999)
+  check ("$100.00 worth of food", List (Item (5000, Food), Item (5000, Food)), 9000)
+  check ("$999.99 worth of food", List (Item (5000, Food), Item (5000, Food), Item (89999, Food)), 89999)
+  check ("$1000.00 worth of food", List (Item (100000, Food)), 85000)
+  check ("$10.00 worth of other", List (Item (1000, Other)), 1075)
+  check ("$10.00 worth of alcohol", List (Item (1000, Alcohol)), 1155)
+  check ("A real mishmash", List (Item (1000, Food), Item (1000, Alcohol), Item (1000, Other), Item (10000, Alcohol)), 13301)
 
-    describe ("priced") {
-      val result = Pricing.priceItems (merchandise)
+  private def check (msg: String, merchandise: List[Item], expected: Int): Unit = {
+    describe (msg) {
+      describe ("priced") {
+        val result = Pricing.priceItems (merchandise)
 
-      it ("costs $20.00") {
-        assert (result === 2000)
+        it (f"costs ${(expected/10.0)}%1.2f") {
+          assert (result === expected)
+        }
       }
     }
   }
