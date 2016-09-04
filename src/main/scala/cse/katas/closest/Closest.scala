@@ -8,7 +8,10 @@ object Closest {
   val closestToZero: List[Int] => Option[Int] = numbers => {
     if (numbers.isEmpty) {None}
     else {
-      Some (numbers.min)
+      val negatives = numbers.filter {n => n < 0}
+      val positives = numbers.filter {n => n >= 0}
+      if (positives.nonEmpty) {Some (positives.min)}
+      else {Some (negatives.max)}
     }
   }
 }
