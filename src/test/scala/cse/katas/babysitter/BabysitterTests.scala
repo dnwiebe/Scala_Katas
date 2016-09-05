@@ -15,11 +15,12 @@ import org.scalatest.path
   the latest she can stay is 4am.
   */
 class BabysitterTests extends path.FunSpec {
-  describe ("Two hours before bedtime") {
-    val result = Babysitter.calculatePay (6, 8, 9)
-
-    it ("costs $20") {
-      assert (result === 20)
-    }
+  it ("Operates correctly") {
+    assert (Babysitter.calculatePay (6, 8, 9) === 20)
+    assert (Babysitter.calculatePay (5, 9, 9) === 40)
+    assert (Babysitter.calculatePay (9, 12, 9) === 18)
+    assert (Babysitter.calculatePay (5, 12, 9) === 58)
+    assert (Babysitter.calculatePay (12, 4, 9) === 32)
+    assert (Babysitter.calculatePay (5, 4, 9) === 90)
   }
 }
