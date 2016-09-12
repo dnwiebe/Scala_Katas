@@ -1,6 +1,7 @@
 # Babysitter
 
 A babysitter has the following pay schedule:
+
 * $10/hr to look after children before their bedtime
 * $6/hr to house-sit after bedtime
 * $8/hr after midnight when work causes her to lose sleep.
@@ -24,14 +25,16 @@ If two different numbers tie for distance from zero (for example, 2 and -2), alw
 # Pricing
 
 A store has the following pricing policy:
+
 1. Buy less than $100 worth of merchandise and pay the full price.
 1. Buy $100 or more, but less than $1000, and get 10% off.
 1. Buy $1000 or more, and get 15% off.
 
 According to the laws governing the store, the following taxes apply:
-Food: no tax.
-Alcohol: 7.5% sales tax + 8% "sin" tax.
-All other merchandise: 7.5% sales tax.
+
+* Food: no tax.
+* Alcohol: 7.5% sales tax + 8% "sin" tax.
+* All other merchandise: 7.5% sales tax.
 
 Discounts are calculated on sticker prices; taxes are calculated on discounted prices.
 
