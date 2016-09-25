@@ -52,3 +52,18 @@ The three segments
   1. Can be joined into a right triangle. (example: 3, 4, 5);
   1. Can only be joined into a triangle that is not one of the preceding cases. (example: 2, 3, 4)
   1. Cannot be made into a triangle. (example: 2, 2, 5) [Warning: might look isosceles at first glance.]
+
+
+# Word Wrap
+
+Test-drive a function to accept a string and a line length, and return a version of the original string, possibly with
+newline characters inserted, such that no line in the resulting string is longer than the supplied line length.
+
+Wherever possible, newlines should be inserted between words; they should be placed inside words only when those
+words are themselves longer than the permitted line length.
+
+For the initial cut of this kata:
+
+* Assume that the input will contain only spaces to separate words: no tabs, no newlines, no form feeds, and hyphens
+are considered to be part of the words they're embedded in.
+* Assume that words will be separated by only one space: no multiple consecutive spaces.
