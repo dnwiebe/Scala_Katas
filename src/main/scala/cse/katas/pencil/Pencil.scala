@@ -14,6 +14,7 @@ class Pencil (val lifespan: Int, val sharpenings: Int) {
     val (newRemaining, output) = input.foldLeft ((pointsRemaining, "")) {(soFar, c) =>
       soFar match {
         case (remaining, output) if remaining <= 0 => (remaining, output + " ")
+        case (remaining, output) if Character.isWhitespace (c) => (remaining, output + c)
         case (remaining, output) => (remaining - 100, output + c)
       }
     }

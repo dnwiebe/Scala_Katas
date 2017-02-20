@@ -23,17 +23,17 @@ class PencilTests extends path.FunSpec {
         val result = subject.write ("our fathers brought forth on this continent")
 
         it ("craps out after 40 total characters") {
-          assert (result === "our fathers                                ")
+          assert (result === "our fathers broug                          ")
         }
 
         describe ("and then sharpened") {
           subject.sharpen ()
 
           describe ("and directed to write more") {
-            val result = subject.write ("brought forth on this continent a new nation")
+            val result = subject.write ("brought forth on this continent a new nation, conceived")
 
             it ("writes 40 more characters and stops") {
-              assert (result === "brought forth on this continent a new na    ")
+              assert (result === "brought forth on this continent a new nation, co       ")
             }
 
             describe ("and sharpened again and used to write even more, then sharpened a third time") {
@@ -58,7 +58,7 @@ class PencilTests extends path.FunSpec {
       val result = subject.write ("Fourscore and seven years ago our fathers brought forth on this continent")
 
       it ("only writes part of it") {
-        assert (result === "Fourscore and seven years ago our father                                 ")
+        assert (result === "Fourscore and seven years ago our fathers broug                          ")
       }
     }
   }
