@@ -1,15 +1,15 @@
 package cse.katas.closest
 
-import scala.collection.TraversableOnce
-
 /**
   * Created by dnwiebe on 9/4/16.
   */
 object Closest {
 
   private val findExtreme = (numbers: List[Int], discriminator: Int => Boolean, extreminator: List[Int] => Int) => {
-    val filtered = numbers.filter (discriminator)
-    if (filtered.nonEmpty) {Some (extreminator (filtered))} else {None}
+    numbers.filter (discriminator) match {
+      case Nil => None
+      case filtered => Some (extreminator (filtered))
+    }
   }
 
   private val findMinPositive: List[Int] => Option[Int] = numbers => {
