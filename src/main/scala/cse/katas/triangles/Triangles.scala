@@ -4,39 +4,41 @@ package cse.katas.triangles
   * Created by dnwiebe on 9/4/16.
   */
 
-trait Classification {
-  val qualifies: (Int, Int, Int) => Boolean
+private object Classification {
+  private val SEQUENCES = List ((0, 1, 2), (1, 2, 0), (2, 0, 1), (2, 1, 0), (1, 0, 2), (0, 2, 1))
+}
 
-  private val ORDERS = List ((0, 1, 2), (1, 2, 0), (2, 0, 1), (2, 1, 0), (1, 0, 2), (0, 2, 1))
-  protected val rotate: (Int, Int, Int, (Int, Int, Int) => Boolean) => Boolean = (a, b, c, closure) => {
+trait Classification {
+  import cse.katas.triangles.Classification._
+
+  def qualifies (a: Int, b: Int, c: Int): Boolean
+
+  protected def rotate (a: Int, b: Int, c: Int, predicate: (Int, Int, Int) => Boolean): Boolean = {
     val argArray = Array (a, b, c)
-    ORDERS.exists {order => closure (argArray (order._1), argArray (order._2), argArray (order._3))}
+    SEQUENCES.exists {sequence => predicate (argArray (sequence._1), argArray (sequence._2), argArray (sequence._3))}
   }
 }
 
 case object Equilateral extends Classification {
-  override val qualifies = (a: Int, b: Int, c: Int) => (a == b) && (b == c)
+  override def qualifies (a: Int, b: Int, c: Int): Boolean = (a == b) && (b == c)
 }
 case object NotATriangle extends Classification {
-  override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => (a + b) < c})
+  override def qualifies (a: Int, b: Int, c: Int): Boolean = rotate (a, b, c, {(a, b, c) => (a + b) < c})
 }
 case object Isosceles extends Classification {
-  override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => a == b})
+  override def qualifies (a: Int, b: Int, c: Int): Boolean = rotate (a, b, c, {(a, b, _) => a == b})
 }
 case object Right extends Classification {
-  override val qualifies = (a: Int, b: Int, c: Int) => rotate (a, b, c, {(a, b, c) => (a*a) + (b*b) == (c*c)})
+  override def qualifies (a: Int, b: Int, c: Int): Boolean = rotate (a, b, c, {(a, b, c) => (a*a) + (b*b) == (c*c)})
 }
 case object Other extends Classification {
-  override val qualifies = (a: Int, b: Int, c: Int) => true
+  override def qualifies (a: Int, b: Int, c: Int): Boolean = true
 }
 
 object Triangles {
-  private val CLASSIFICATION_SEQUENCE = List (Equilateral, NotATriangle, Isosceles, Right)
+  private val CLASSIFICATION_SEQUENCE = List (Equilateral, NotATriangle, Isosceles, Right, Other)
 
-  val classifySegments: (Int, Int, Int) => Classification = (a, b, c) => {
-    CLASSIFICATION_SEQUENCE.find {triangleType => triangleType.qualifies (a, b, c)} match {
-      case Some (triangleType) => triangleType
-      case None => Other
-    }
+  def classifySegments (a: Int, b: Int, c: Int): Classification = {
+    CLASSIFICATION_SEQUENCE.find {triangleType => triangleType.qualifies (a, b, c)}.get
   }
 }
