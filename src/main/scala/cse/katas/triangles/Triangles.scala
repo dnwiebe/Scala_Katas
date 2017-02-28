@@ -23,7 +23,7 @@ case object Equilateral extends Classification {
   override def qualifies (a: Int, b: Int, c: Int): Boolean = (a == b) && (b == c)
 }
 case object NotATriangle extends Classification {
-  override def qualifies (a: Int, b: Int, c: Int): Boolean = rotate (a, b, c, {(a, b, c) => (a + b) < c})
+  override def qualifies (a: Int, b: Int, c: Int): Boolean = rotate (a, b, c, {(a, b, c) => (a + b) <= c})
 }
 case object Isosceles extends Classification {
   override def qualifies (a: Int, b: Int, c: Int): Boolean = rotate (a, b, c, {(a, b, _) => a == b})

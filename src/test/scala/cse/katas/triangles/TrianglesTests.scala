@@ -29,8 +29,8 @@ class TrianglesTests extends path.FunSpec {
     inAllOrders (10, 11, 12, Other)
   }
 
-  describe ("One segment that's longer than the sum of the other two") {
-    inAllOrders (5, 5, 12, NotATriangle)
+  describe ("One segment that's equal to the sum of the other two") {
+    inAllOrders (7, 5, 12, NotATriangle)
   }
 
   private def inOneOrder (msg: String, a: Int, b: Int, c: Int, expected: Classification): Unit = {
