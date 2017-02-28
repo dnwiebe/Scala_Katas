@@ -6,22 +6,12 @@ package cse.katas.wordwrap
 object WordWrap {
 
   def wrap (input: String, lineLength: Int): String = {
-    val words: List[String] = input.split (" ").toList.flatMap {partition (_, lineLength)}
-    val lines = words.foldLeft (List[String] ()) {(soFar, word) =>
-      soFar match {
-        case w :: ws if (w.length + word.length + 1) <= lineLength => s"$w $word" :: ws
-        case _ => word :: soFar
+    input match {
+      case s if s.length () <= lineLength => input
+      case s => input.lastIndexOf (' ', lineLength) match {
+        case idx if idx < 0 => s.substring (0, lineLength) + "\n" + wrap (s.substring (lineLength), lineLength)
+        case idx => s.substring (0, idx) + "\n" + wrap (s.substring (idx + 1), lineLength)
       }
-    }
-    lines.reverse.mkString ("\n")
-  }
-
-  private def partition (string: String, size: Int): List[String] = {
-    if (string.length <= size) {
-      List (string)
-    }
-    else {
-      string.substring (0, size) :: partition (string.substring (size), size)
     }
   }
 }

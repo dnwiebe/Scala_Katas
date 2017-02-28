@@ -18,26 +18,21 @@ import org.scalatest.path
 
 class WordWrapTests extends path.FunSpec {
 
-  checkWordWrap ("", 10, "")
-  checkWordWrap ("See Spot run.", 80, "See Spot run.")
-  checkWordWrap ("See Spot run.", 3, "See\nSpo\nt\nrun\n.")
-  checkWordWrap ("See Spot run.", 10, "See Spot\nrun.")
+  class WordWrapTests extends path.FunSpec {
 
-  private def escape (s: String): String = {
-    s.foldLeft ("") {(soFar, c) => if (c == '\n') soFar + "\\n" else soFar + c}
-  }
+    describe ("Given a string from a children's book and a short line length") {
+      val result = WordWrap.wrap ("See Spot run. Run, Spot, run!", 10)
 
-  private def countLines (s: String): Int = {
-    s.foldLeft (1) {(soFar, c) => if (c == '\n') soFar + 1 else soFar}
-  }
+      it ("breaks the line in three") {
+        assert (result === "See Spot\nrun. Run,\nSpot, run!")
+      }
+    }
 
-  private def checkWordWrap (input: String, lineLength: Int, expected: String): Unit = {
-    describe (s"Given an input of '${escape(input)}' into a line length of ${lineLength}") {
-      val actual = WordWrap.wrap (input, lineLength)
-      val expectedLineCount = countLines(expected)
+    describe ("Given a word longer than two lines") {
+      val result = WordWrap.wrap ("abcdefghijklmnopqrstuvwxyz", 10)
 
-      it (s"produces ${expectedLineCount} line${if (expectedLineCount == 1) "" else "s"}: '${escape (expected)}'") {
-        assert (actual === expected)
+      it ("breaks the word twice") {
+        assert (result === "abcdefghij\nklmnopqrst\nuvwxyz")
       }
     }
   }
