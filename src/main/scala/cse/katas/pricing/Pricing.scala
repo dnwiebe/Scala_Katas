@@ -4,16 +4,17 @@ package cse.katas.pricing
   * Created by dnwiebe on 9/4/16.
   */
 
-trait ItemNature {
-  def taxRate: Int
+trait TaxRate {
+  def apply (): Int
 }
-case object Food extends ItemNature {override def taxRate = 0}
-case object Alcohol extends ItemNature {override def taxRate = 155}
-case object Other extends ItemNature {override def taxRate = 75}
+
+case object Food extends TaxRate {override def apply () = 0}
+case object Alcohol extends TaxRate {override def apply () = 155}
+case object Other extends TaxRate {override def apply () = 75}
 
 case class Item (
   price: Int,
-  nature: ItemNature
+  taxRate: TaxRate
 )
 
 object Pricing {
@@ -24,8 +25,8 @@ object Pricing {
       case p if p >= 10000 => 100
       case _ => 0
     }
-    val discountedPrices = items.map {item => Item (addPercent (item.price, -discount), item.nature)}
-    val taxedPrices = discountedPrices.map {item => Item (addPercent (item.price, item.nature.taxRate), item.nature)}
+    val discountedPrices = items.map {item => Item (addPercent (item.price, -discount), item.taxRate)}
+    val taxedPrices = discountedPrices.map {item => Item (addPercent (item.price, item.taxRate ()), item.taxRate)}
     itemsTotalPrice (taxedPrices)
   }
 
@@ -34,6 +35,6 @@ object Pricing {
   }
 
   private def itemsTotalPrice (items: Seq[Item]): Int = {
-    items.foldLeft (0) {(soFar, item) => soFar + item.price}
+    items.map {_.price}.sum
   }
 }
