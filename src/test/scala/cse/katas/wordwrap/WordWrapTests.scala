@@ -19,10 +19,18 @@ import org.scalatest.path
 class WordWrapTests extends path.FunSpec {
 
   describe ("Given a string from a children's book and a short line length") {
-    val result = WordWrap.wrap ("See Spot run.", 10)
+    val result = WordWrap.wrap ("See Spot run. Run, Spot, run!", 10)
 
-    it ("breaks the line in two") {
-      assert (result === "See Spot\nrun.")
+    it ("breaks the line in three") {
+      assert (result === "See Spot\nrun. Run,\nSpot, run!")
+    }
+  }
+
+  describe ("Given a word longer than two lines") {
+    val result = WordWrap.wrap ("abcdefghijklmnopqrstuvwxyz", 10)
+
+    it ("breaks the word twice") {
+      assert (result === "abcdefghij\nklmnopqrst\nuvwxyz")
     }
   }
 }

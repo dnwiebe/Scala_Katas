@@ -22,14 +22,10 @@ import org.scalatest.path
 class PricingTests extends path.FunSpec {
 
   describe ("$20.00 worth of food") {
-    val merchandise = List (Item (500, Food), Item (1500, Food))
+    val result = Pricing.priceItems (List (Item (500, Food), Item (1500, Food)))
 
-    describe ("priced") {
-      val result = Pricing.priceItems (merchandise)
-
-      it ("costs $20.00") {
-        assert (result === 2000)
-      }
+    it ("costs $20.00") {
+      assert (result === 2000)
     }
   }
 }
