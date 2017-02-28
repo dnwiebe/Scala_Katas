@@ -15,12 +15,28 @@ import org.scalatest.path
   the latest she can stay is 4am.
   */
 class BabysitterTests extends path.FunSpec {
-  it ("Operates correctly") {
-    assert (Babysitter.calculatePay (6, 8, 9) === 20)
-    assert (Babysitter.calculatePay (5, 9, 9) === 40)
-    assert (Babysitter.calculatePay (9, 12, 9) === 18)
-    assert (Babysitter.calculatePay (5, 12, 9) === 58)
-    assert (Babysitter.calculatePay (12, 4, 9) === 32)
-    assert (Babysitter.calculatePay (5, 4, 9) === 90)
+
+  check (6, 8, 9, 20)
+  check (5, 9, 9, 40)
+  check (9, 12, 9, 18)
+  check (5, 12, 9, 58)
+  check (12, 4, 9, 32)
+  check (5, 4, 9, 90)
+  
+  private def check (arrival: Int, departure: Int, bedtime: Int, expectedPay: Int): Unit = {
+    describe (s"A babysitter who arrives at ${time(arrival)} and departs at ${time(departure)}, with bedtime at ${time(bedtime)}") {
+      val result = Babysitter.calculatePay (arrival, departure, bedtime);
+      
+      it (s"should be paid $$$expectedPay") {
+        assert (result === expectedPay)
+      }
+    }
+  }
+  
+  private def time (integralTime: Int): String = {
+    integralTime match {
+      case t if (t < 5) || (t == 12) => s"${t}am"
+      case t => s"${t}pm"
+    }
   }
 }
