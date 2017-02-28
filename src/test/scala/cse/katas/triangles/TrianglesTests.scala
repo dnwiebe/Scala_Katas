@@ -33,6 +33,10 @@ class TrianglesTests extends path.FunSpec {
     inAllOrders (7, 5, 12, NotATriangle)
   }
 
+  describe ("Three segments that appear isosceles except that they're actually not a triangle") {
+    inAllOrders (4, 4, 8, NotATriangle)
+  }
+
   private def inOneOrder (msg: String, a: Int, b: Int, c: Int, expected: Classification): Unit = {
     describe (s"$msg ($a, $b, $c)") {
       val result = Triangles.classifySegments (a, b, c)
