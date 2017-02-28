@@ -37,11 +37,16 @@ class TrianglesTests extends path.FunSpec {
     inAllOrders (4, 4, 8, NotATriangle)
   }
 
-  private def inOneOrder (msg: String, a: Int, b: Int, c: Int, expected: Classification): Unit = {
+  private def nameOfObject (obj: Any): String = {
+    // Remove $ at end of class name
+    obj.getClass.getSimpleName.reverse.substring (1).reverse
+  }
+
+  private def inOneOrder (msg: String, a: Int, b: Int, c: Int, expected: Classification) {
     describe (s"$msg ($a, $b, $c)") {
       val result = Triangles.classifySegments (a, b, c)
 
-      it (s"classify as ${expected.getClass.getSimpleName.reverse.substring (1).reverse}") {
+      it (s"classify as ${nameOfObject (expected)}") {
         assert (result === expected)
       }
     }
