@@ -128,6 +128,11 @@ names: love, fifteen, thirty, and forty. During this stage,
 the score will be either of the form "Alice forty, Bob fifteen"
 if the players have different scores, or of the form
 "Love all" if the scores are the same.
+  
+When a player has forty and scores again, what happens depends
+on the other player's score.  If the other player has forty
+as well, the game moves on to the Relative Stage.  If the
+other player does not have forty yet, the game is over.
 
 In the second stage, the Relative Stage, the representation
 of the score depends on how many points one player has
