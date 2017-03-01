@@ -46,63 +46,85 @@ import org.scalatest.path
 
 class TennisScoreTest extends path.FunSpec {
 
-  describe ("A TennisScore") {
-    val checker = new Checker (TennisScore ("Alice", "Bob"));
-
-    it ("handles a whirlwind win by Alice") {
-      checker ("Love all")
-        .left ("Alice fifteen, Bob love")
-        .left ("Alice thirty, Bob love")
-        .left ("Alice forty, Bob love")
-        .left ("Game Alice")
-        .left ("Game Alice")
-        .right ("Game Alice")
-        .right ("Game Alice")
-    }
-
-    it ("handles a whirlwind win by Bob") {
-      checker ("Love all")
-        .right ("Alice love, Bob fifteen")
-        .right ("Alice love, Bob thirty")
-        .right ("Alice love, Bob forty")
-        .right ("Game Bob")
-        .right ("Game Bob")
-        .left ("Game Bob")
-        .left ("Game Bob")
-    }
-
-    it ("handles a long alternation") {
-      var relativeStage = checker ("Love all")
-        .left ("Alice fifteen, Bob love")
-        .right ("Fifteen all")
-        .right ("Alice fifteen, Bob thirty")
-        .left ("Thirty all")
-        .left ("Alice forty, Bob thirty")
-        .right ("Forty all")
-
-      (1 to 20).foreach {_ =>
-        relativeStage = relativeStage
-          .left ("Advantage Alice")
-          .right ("Deuce")
-          .right ("Advantage Bob")
-          .left ("Deuce")
-      }
-    }
+  describe ("A new game") {
+    verify (TennisScore ("Alice", "Bob"), "Alice", "Bob",
+      branch ("Love all",
+        branch ("Alice fifteen, Bob love",
+          branch ("Alice thirty, Bob love",
+            branch ("Alice forty, Bob love",
+              branch ("Game Alice",
+                branch ("Game Alice"),
+                branch ("Game Alice")
+              ),
+              branch ("Alice forty, Bob fifteen",
+                branch ("Game Alice"),
+                branch ("Alice forty, Bob thirty",
+                  branch ("Game Alice"),
+                  branch ("Forty all",
+                    branch ("Advantage Alice",
+                      branch ("Game Alice"),
+                      branch ("Deuce")
+                    ),
+                    branch ("Advantage Bob",
+                      branch ("Deuce"),
+                      branch ("Game Bob")
+                    )
+                  )
+                )
+              )
+            ),
+            branch ("Alice thirty, Bob fifteen",
+              branch ("Alice forty, Bob fifteen",
+                branch ("Game Alice"),
+                branch ("Alice forty, Bob thirty")
+              ),
+              branch ("Thirty all",
+                branch ("Alice forty, Bob thirty",
+                  branch ("Game Alice"),
+                  branch ("Forty all",
+                    branch ("Advantage Alice"),
+                    branch ("Advantage Bob")
+                  )
+                ),
+                branch ("Alice thirty, Bob forty",
+                  branch ("Forty all"),
+                  branch ("Game Bob")
+                )
+              )
+            )
+          ),
+          branch ("Fifteen all")
+        ),
+        branch ("Alice love, Bob fifteen")
+      )
+    )
   }
 
-  private class Checker (score: TennisScore) {
+  private def branch (representation: String, left: Node, right: Node): Node = {
+    Node (representation, Some (left), Some (right))
+  }
 
-    def apply (expected: String): Checker = {
-      assert (score.toString === expected)
-      this
+  private def branch (representation: String): Node = {
+    Node (representation, None, None)
+  }
+
+  private case class Node (representation: String, left: Option[Node], right: Option[Node])
+
+  private def verify (score: TennisScore, left: String, right: String, node: Node): Unit = {
+    it (s"represents the score as '${node.representation}'") {
+      assert (score.toString === node.representation)
     }
 
-    def left (expected: String): Checker = {
-      new Checker (score.scoreLeft) (expected)
+    if (node.left.nonEmpty) {
+      describe (s"after a score by $left") {
+        verify (score.scoreLeft, left, right, node.left.get)
+      }
     }
 
-    def right (expected: String): Checker = {
-      new Checker (score.scoreRight) (expected)
+    if (node.right.nonEmpty) {
+      describe (s"after a score by $right") {
+        verify (score.scoreRight, left, right, node.right.get)
+      }
     }
   }
 }
