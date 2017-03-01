@@ -19,6 +19,11 @@ import org.scalatest.path
   if the players have different scores, or of the form
   "Love all" if the scores are the same.
 
+  When a player has forty and scores again, what happens depends
+  on the other player's score.  If the other player has forty
+  as well, the game moves on to the Relative Stage.  If the
+  other player does not have forty yet, the game is over.
+
   In the second stage, the Relative Stage, the representation
   of the score depends on how many points one player has
   relative to the other.  If Alice and Bob have the same score,
@@ -40,27 +45,64 @@ import org.scalatest.path
  */
 
 class TennisScoreTest extends path.FunSpec {
-  describe ("A new game") {
-    val subject0_0 = new TennisScore ("Alice", "Bob")
 
-    it ("shows the expected score") {
-      assert (subject0_0.toString === "Love all")
+  describe ("A TennisScore") {
+    val checker = new Checker (TennisScore ("Alice", "Bob"));
+
+    it ("handles a whirlwind win by Alice") {
+      checker ("Love all")
+        .left ("Alice fifteen, Bob love")
+        .left ("Alice thirty, Bob love")
+        .left ("Alice forty, Bob love")
+        .left ("Game Alice")
+        .left ("Game Alice")
+        .right ("Game Alice")
+        .right ("Game Alice")
     }
 
-    describe ("after a score by Alice") {
-      val subject1_0 = subject0_0.scoreLeft
-
-      it ("shows the expected score") {
-        assert (subject1_0.toString === "Alice fifteen, Bob love")
-      }
+    it ("handles a whirlwind win by Bob") {
+      checker ("Love all")
+        .right ("Alice love, Bob fifteen")
+        .right ("Alice love, Bob thirty")
+        .right ("Alice love, Bob forty")
+        .right ("Game Bob")
+        .right ("Game Bob")
+        .left ("Game Bob")
+        .left ("Game Bob")
     }
 
-    describe ("after a score by Bob") {
-      val subject0_1 = subject0_0.scoreRight
+    it ("handles a long alternation") {
+      var relativeStage = checker ("Love all")
+        .left ("Alice fifteen, Bob love")
+        .right ("Fifteen all")
+        .right ("Alice fifteen, Bob thirty")
+        .left ("Thirty all")
+        .left ("Alice forty, Bob thirty")
+        .right ("Forty all")
 
-      it ("shows the expected score") {
-        assert (subject0_1.toString === "Alice love, Bob fifteen")
+      (1 to 20).foreach {_ =>
+        relativeStage = relativeStage
+          .left ("Advantage Alice")
+          .right ("Deuce")
+          .right ("Advantage Bob")
+          .left ("Deuce")
       }
+    }
+  }
+
+  private class Checker (score: TennisScore) {
+
+    def apply (expected: String): Checker = {
+      assert (score.toString === expected)
+      this
+    }
+
+    def left (expected: String): Checker = {
+      new Checker (score.scoreLeft) (expected)
+    }
+
+    def right (expected: String): Checker = {
+      new Checker (score.scoreRight) (expected)
     }
   }
 }
