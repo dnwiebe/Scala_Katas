@@ -20,8 +20,8 @@ class PokerHandComparatorTest extends path.FunSpec {
         Hand (Ace of Hearts, Ace of Diamonds, Eight of Clubs, Four of Spades, Seven of Hearts)
       ),
       RankPair (TwoPair,
-        Hand (Two of Hearts, Two of Diamonds, Two of Clubs, Five of Spades, Four of Hearts),
-        Hand (Ace of Hearts, Ace of Diamonds, Ace of Clubs, Four of Spades, Three of Hearts)
+        Hand (Two of Hearts, Two of Diamonds, Four of Clubs, Five of Spades, Four of Hearts),
+        Hand (Ace of Hearts, Ace of Diamonds, King of Clubs, King of Spades, Three of Hearts)
       ),
       RankPair (ThreeOfAKind,
         Hand (Two of Hearts, Two of Diamonds, Two of Clubs, Four of Spades, Three of Hearts),

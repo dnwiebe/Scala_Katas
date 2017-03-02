@@ -7,32 +7,31 @@ import cse.katas.poker.PokerHandComparator.Hand
   */
 
 object PokerHandComparator {
-  case class Face (name: String) {
+  case class Face (name: String, highValue: Int, lowValue: Int) {
     def of (suit: Suit): Card = Card (this, suit)
     override def toString: String = name
   }
-  val Ace = Face ("Ace")
-  val One = Face ("One")
-  val Two = Face ("Two")
-  val Three = Face ("Three")
-  val Four = Face ("Four")
-  val Five = Face ("Five")
-  val Six = Face ("Six")
-  val Seven = Face ("Seven")
-  val Eight = Face ("Eight")
-  val Nine = Face ("Nine")
-  val Ten = Face ("Ten")
-  val Jack = Face ("Jack")
-  val Queen = Face ("Queen")
-  val King = Face ("King")
+  val Ace = Face ("Ace", 1, 14)
+  val Two = Face ("Two", 2, 2)
+  val Three = Face ("Three", 3, 3)
+  val Four = Face ("Four", 4, 4)
+  val Five = Face ("Five", 5, 5)
+  val Six = Face ("Six", 6, 6)
+  val Seven = Face ("Seven", 7, 7)
+  val Eight = Face ("Eight", 8, 8)
+  val Nine = Face ("Nine", 9, 9)
+  val Ten = Face ("Ten", 10, 10)
+  val Jack = Face ("Jack", 11, 11)
+  val Queen = Face ("Queen", 12, 12)
+  val King = Face ("King", 13, 13)
 
-  case class Suit (name: String) {
+  case class Suit (name: String, rank: Int) {
     override def toString: String = name
   }
-  val Clubs = Suit ("Clubs")
-  val Diamonds = Suit ("Diamonds")
-  val Hearts = Suit ("Hearts")
-  val Spades = Suit ("Spades")
+  val Clubs = Suit ("Clubs", 1)
+  val Diamonds = Suit ("Diamonds", 2)
+  val Hearts = Suit ("Hearts", 3)
+  val Spades = Suit ("Spades", 4)
 
   case class Card (face: Face, suit: Suit) {
     override def toString: String = s"${face.toString} of ${suit.toString}"
@@ -45,40 +44,92 @@ object PokerHandComparator {
   }
 
   trait Rank {
+    def value: Int
     def recognizes (hand: Hand): Boolean
+
+    protected def faceCounts (hand: Hand): Map[Face, Int] = {
+      counts (hand.cards.toList.map {_.face})
+    }
+
+    protected def suitCounts (hand: Hand): Map[Suit, Int] = {
+      counts (hand.cards.toList.map {_.suit})
+    }
+
+    protected def isStraight (hand: Hand): Boolean = {
+      val values = faceCounts (hand).values
+      if (values.size == 5) {
+        val sorted: List[Int] = values.toList.sorted
+        (sorted.head + 4) == sorted.last
+      }
+      else {
+        false
+      }
+    }
+
+    protected def isFlush (hand: Hand): Boolean = {
+      suitCounts (hand).values.size == 1
+    }
+
+    private def counts[A] (items: List[A]): Map[A, Int] = {
+      items.foldLeft (Map[A, Int] ()) {(soFar, item) =>
+        soFar.get (item) match {
+          case Some (n) => soFar + (item -> (n + 1))
+          case None => soFar + (item -> 1)
+        }
+      }
+    }
   }
   case object HighCard extends Rank {
-    def recognizes (hand: Hand): Boolean = false
+    def value = 1
+    def recognizes (hand: Hand): Boolean = true
   }
   case object OnePair extends Rank {
-    def recognizes (hand: Hand): Boolean = false
+    def value = 2
+    def recognizes (hand: Hand): Boolean = faceCounts (hand).values.count (_ == 2) == 1
   }
   case object TwoPair extends Rank {
-    def recognizes (hand: Hand): Boolean = false
+    def value = 3
+    def recognizes (hand: Hand): Boolean = faceCounts (hand).values.count (_ == 2) == 2
   }
   case object ThreeOfAKind extends Rank {
-    def recognizes (hand: Hand): Boolean = false
+    def value = 4
+    def recognizes (hand: Hand): Boolean = faceCounts (hand).values.count (_ == 3) == 1
   }
   case object Straight extends Rank {
-    def recognizes (hand: Hand): Boolean = false
+    def value = 5
+    def recognizes (hand: Hand): Boolean = isStraight (hand)
   }
   case object Flush extends Rank {
-    def recognizes (hand: Hand): Boolean = false
+    def value = 6
+    def recognizes (hand: Hand): Boolean = isFlush (hand)
   }
   case object FullHouse extends Rank {
-    def recognizes (hand: Hand): Boolean = false
+    def value = 7
+    def recognizes (hand: Hand): Boolean = {
+      val counts = faceCounts (hand).values
+      counts.exists (_ == 2) && counts.exists (_ == 3)
+    }
   }
   case object FourOfAKind extends Rank {
-    def recognizes (hand: Hand): Boolean = false
+    def value = 8
+    def recognizes (hand: Hand): Boolean = faceCounts (hand).values.count (_ == 4) == 1
   }
   case object StraightFlush extends Rank {
-    def recognizes (hand: Hand): Boolean = false
+    def value = 9
+    def recognizes (hand: Hand): Boolean = isStraight (hand) && isFlush (hand)
   }
   case object RoyalFlush extends Rank {
+    def value = 10
     def recognizes (hand: Hand): Boolean = false
   }
+  private val RANKS = List (RoyalFlush, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind,
+    TwoPair, OnePair, HighCard)
 
   def outranks (first: Hand, second: Hand): Boolean = {
-    false
+    rank (first).value > rank (second).value
+  }
+
+  private def rank (hand: Hand): Rank = {
+    RANKS.find (_.recognizes(hand)).get
   }
 }
