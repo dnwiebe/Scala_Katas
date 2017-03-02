@@ -14,15 +14,15 @@ trait Classification {
   def qualifies (a: Int, b: Int, c: Int): Boolean
 
   protected def rotate (a: Int, b: Int, c: Int, predicate: (Int, Int, Int) => Boolean): Boolean = {
-    val argArray = Array (a, b, c)
-    SEQUENCES.exists {sequence => predicate (argArray (sequence._1), argArray (sequence._2), argArray (sequence._3))}
+    val args = Array (a, b, c)
+    SEQUENCES.exists {seq => predicate (args (seq._1), args (seq._2), args (seq._3))}
   }
 }
 
-case object Equilateral extends Classification {
+case object Equilateral extends Classification { // must be before Isosceles
   override def qualifies (a: Int, b: Int, c: Int): Boolean = (a == b) && (b == c)
 }
-case object NotATriangle extends Classification {
+case object None extends Classification { // must be before Isosceles
   override def qualifies (a: Int, b: Int, c: Int): Boolean = rotate (a, b, c, {(a, b, c) => (a + b) <= c})
 }
 case object Isosceles extends Classification {
@@ -31,12 +31,12 @@ case object Isosceles extends Classification {
 case object Right extends Classification {
   override def qualifies (a: Int, b: Int, c: Int): Boolean = rotate (a, b, c, {(a, b, c) => (a*a) + (b*b) == (c*c)})
 }
-case object Other extends Classification {
+case object Other extends Classification { // must be at end
   override def qualifies (a: Int, b: Int, c: Int): Boolean = true
 }
 
 object Triangles {
-  private val CLASSIFICATION_SEQUENCE = List (Equilateral, NotATriangle, Isosceles, Right, Other)
+  private val CLASSIFICATION_SEQUENCE = List (Equilateral, None, Isosceles, Right, Other)
 
   def classifySegments (a: Int, b: Int, c: Int): Classification = {
     CLASSIFICATION_SEQUENCE.find {triangleType => triangleType.qualifies (a, b, c)}.get

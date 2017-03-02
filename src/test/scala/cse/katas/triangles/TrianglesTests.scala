@@ -30,11 +30,11 @@ class TrianglesTests extends path.FunSpec {
   }
 
   describe ("One segment that's equal to the sum of the other two") {
-    inAllOrders (7, 5, 12, NotATriangle)
+    inAllOrders (7, 5, 12, None)
   }
 
   describe ("Three segments that appear isosceles except that they're actually not a triangle") {
-    inAllOrders (4, 4, 8, NotATriangle)
+    inAllOrders (4, 4, 8, None)
   }
 
   private def nameOfObject (obj: Any): String = {
