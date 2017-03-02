@@ -9,23 +9,24 @@ import org.scalatest.path
 class PokerHandComparatorTest extends path.FunSpec {
 
   describe ("Given a series of poker hands") {
+    case class RankPair (rankName: String, lowHand: Hand, highHand: Hand)
     val rankPairs = List (
       RankPair ("high card",
-        Hand ((F3, D), (FJ, C), (F8, S), (F4, H), (F2, S)),
-        Hand ((F3, D), (FQ, C), (F8, S), (F4, H), (F2, S))
+        Hand (Two of Diamonds, Three of Clubs, Four of Spades, Five of Hearts, Six of Spades),
+        Hand (Ace of Diamonds, King of Clubs, Queen of Spades, Jack of Hearts, Ten of Spades)
       ),
-      RankPair ("one pair",
-        Hand ((F2, H), (F2, D), (F8, C), (F4, S), (F7, H)),
-        Hand ((FA, H), (FA, D), (F8, C), (F4, S), (F7, H))
+      RankPair ("pair",
+        Hand (Two of Hearts, Two of Diamonds, Eight of Clubs, Four of Spades, Seven of Hearts),
+        Hand (Ace of Hearts, Ace of Diamonds, Eight of Clubs, Four of Spades, Seven of Hearts)
       ),
       RankPair ("two pair",
-        Hand ((F2, H), (F2, D), (F8, C), (F4, S), (F8, H)),
-        Hand ((F2, H), (FA, D), (F9, C), (F4, S), (F9, H))
+        Hand (Two of Hearts, Two of Diamonds, Three of Clubs, Four of Spades, Three of Hearts),
+        Hand (Ace of Hearts, Ace of Diamonds, King of Clubs, Four of Spades, King of Hearts)
       ),
       // ...
       RankPair ("royal flush",
-        Hand ((FA, C), (FK, C), (FQ, C), (FJ, C), (F10, C)),
-        Hand ((FA, S), (FK, S), (FQ, S), (FJ, S), (F10, S))
+        Hand (Ace of Clubs, King of Clubs, Queen of Clubs, Jack of Clubs, Ten of Clubs),
+        Hand (Ace of Spades, King of Spades, Queen of Spades, Jack of Spades, Ten of Spades)
       )
     )
 
@@ -53,7 +54,7 @@ class PokerHandComparatorTest extends path.FunSpec {
           RankExample ("high", rankPairPair._2.rankName, rankPairPair._2.highHand)
         )
 
-        describe (s"${rankPairPair._1.rankName} and ${rankPairPair._2.rankName}") {
+        describe (s"${rankPairPair._1.rankName} vs ${rankPairPair._2.rankName}") {
           case class Combo (lowEx: RankExample, highEx: RankExample)
           val combos = for (low <- lows; high <- highs) yield Combo (low, high)
           combos.foreach { combo =>
@@ -69,7 +70,4 @@ class PokerHandComparatorTest extends path.FunSpec {
       }
     }
   }
-
-  case class RankPair (rankName: String, lowHand: Hand, highHand: Hand)
-
 }
