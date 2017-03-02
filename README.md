@@ -1,3 +1,17 @@
+####Note
+There are several branches in this repository:
+* ```master```: Contains skeleton tests and skeleton production code for 
+each of the katas listed here. All the tests fail. You can use the
+existing code and tests to build your solution on, or you can completely
+replace some or all of it.
+* all the others: Each kata has its own branch.  If you check out the
+branch for a particular kata, all the code for the other katas will
+disappear, and you'll see a possible solution for the selected kata.
+All the tests pass. In all cases, there are other solutions; there 
+may even be _better_ solutions.  The ones provided _are_ solutions, 
+but not _the_ solutions.
+
+
 # Babysitter
 
 A babysitter has the following pay schedule:
@@ -124,7 +138,7 @@ The score of a tennis game has two stages.
 
 In the first, which we will call the Absolute Stage, the
 two players proceed through a sequence of absolute point
-names: love, fifteen, thirty, and forty. During this stage,
+names: "love," "fifteen," "thirty," and "forty." During this stage,
 the score will be either of the form "Alice forty, Bob fifteen"
 if the players have different scores, or of the form
 "Love all" if the scores are the same.
@@ -151,4 +165,4 @@ Write some code that can take a series of scores by one
 player or the other and produce the proper representation
 of the game's score at each step.
 
-Prohibit scoring after the game has ended.
+Prohibit further scoring after the game has ended.
