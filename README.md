@@ -174,11 +174,13 @@ Write some code that, given two five-card poker hands,
 tells which hand outranks the other.
 
 Unlike the other katas, this one provides a significant
-amount of pre-written testing functionality.  If you choose
-to use this, it will have a significant effect on the
-way your data structures are arranged; this may affect your
-algorithms.  Feel free to discard it and start from scratch
-if you don't like it.
+amount of pre-written testing functionality.  (Note that
+not all these tests fail in the ```master``` branch.
+However, that doesn't mean we've written any production code
+for you.)  If you choose to use this, it will have a 
+significant effect on the way your data structures are 
+arranged; this may affect your algorithms.  Feel free to 
+discard it and start from scratch if you don't like it.
 
 Poker ranking references are provided in many places on
 the Internet, including [this one.](http://www.cardplayer.com/rules-of-poker/hand-rankings)
