@@ -12,8 +12,8 @@ class PokerHandComparatorTest extends path.FunSpec {
     case class RankPair (rank: Rank, lowHand: Hand, highHand: Hand)
     val rankPairs = List (
       RankPair (HighCard,
-        Hand (Two of Diamonds, Three of Clubs, Four of Spades, Five of Hearts, Six of Spades),
-        Hand (Ace of Diamonds, King of Clubs, Queen of Spades, Jack of Hearts, Ten of Spades)
+        Hand (Two of Clubs, Three of Spades, Four of Hearts, Five of Spades, Seven of Diamonds),
+        Hand (Ace of Diamonds, King of Clubs, Queen of Spades, Jack of Hearts, Nine of Spades)
       ),
       RankPair (OnePair,
         Hand (Two of Hearts, Two of Diamonds, Eight of Clubs, Four of Spades, Seven of Hearts),
@@ -32,7 +32,7 @@ class PokerHandComparatorTest extends path.FunSpec {
         Hand (Ten of Hearts, Jack of Diamonds, Queen of Clubs, King of Spades, Ace of Hearts)
       ),
       RankPair (Flush,
-        Hand (Ace of Hearts, Two of Hearts, Three of Hearts, Four of Hearts, Six of Hearts),
+        Hand (Two of Hearts, Three of Hearts, Four of Hearts, Five of Hearts, Seven of Hearts),
         Hand (Nine of Hearts, Jack of Hearts, Queen of Hearts, King of Hearts, Ace of Hearts)
       ),
       RankPair (FullHouse,
