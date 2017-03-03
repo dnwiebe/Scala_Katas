@@ -5,22 +5,23 @@ package cse.katas.closest
   */
 object Closest {
 
-  private val findExtreme = (numbers: List[Int], discriminator: Int => Boolean, extreminator: List[Int] => Int) => {
+  private def findExtremeFiltered (numbers: List[Int], discriminator: Int => Boolean,
+                                   extreminator: List[Int] => Int): Option[Int] = {
     numbers.filter (discriminator) match {
       case Nil => None
       case filtered => Some (extreminator (filtered))
     }
   }
 
-  private val findMinPositive: List[Int] => Option[Int] = numbers => {
-    findExtreme (numbers, {n => n >= 0}, {x => x.min})
+  private def findMinPositive (numbers: List[Int]): Option[Int] = {
+    findExtremeFiltered (numbers, _ >= 0, _.min)
   }
 
-  private val findMinNegative: List[Int] => Option[Int] = numbers => {
-    findExtreme (numbers, {n => n < 0}, {x => x.max})
+  private def findMinNegative (numbers: List[Int]): Option[Int] = {
+    findExtremeFiltered (numbers, _ < 0, _.max)
   }
 
-  val closestToZero: List[Int] => Option[Int] = numbers => {
+  def closestToZero (numbers: List[Int]): Option[Int] = {
     (findMinPositive (numbers), findMinNegative (numbers)) match {
       case (None, None) => None
       case (p, None) => p
