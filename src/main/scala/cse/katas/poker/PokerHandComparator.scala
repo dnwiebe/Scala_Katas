@@ -56,18 +56,18 @@ object PokerHandComparator {
     }
 
     protected def isStraight (hand: Hand): Boolean = {
-      val values = faceCounts (hand).values
-      if (values.size == 5) {
-        val sorted: List[Int] = values.toList.sorted
-        (sorted.head + 4) == sorted.last
-      }
-      else {
-        false
-      }
+      val lowValues = hand.cards.map {_.face.lowValue}.toList.sorted
+      val highValues = hand.cards.map {_.face.highValue}.toList.sorted
+      ((lowValues.head + 4) == lowValues.last) || ((highValues.head + 4) == highValues.last)
     }
 
     protected def isFlush (hand: Hand): Boolean = {
       suitCounts (hand).values.size == 1
+    }
+
+    protected def isRoyalStraight (hand: Hand): Boolean = {
+      def faces = hand.cards.map {_.face}
+      isStraight (hand) && faces.contains (Ace) && faces.contains (Ten)
     }
 
     private def counts[A] (items: List[A]): Map[A, Int] = {
@@ -120,7 +120,10 @@ object PokerHandComparator {
   }
   case object RoyalFlush extends Rank {
     def value = 10
-    def recognizes (hand: Hand): Boolean = false
+    def recognizes (hand: Hand): Boolean = {
+      isFlush (hand) &&
+      isRoyalStraight (hand)
+    }
   }
   private val RANKS = List (RoyalFlush, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind,
     TwoPair, OnePair, HighCard)
