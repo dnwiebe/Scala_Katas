@@ -34,7 +34,7 @@ class PricingTests extends path.FunSpec {
       describe ("priced") {
         val result = Pricing.priceItems (merchandise)
 
-        it (f"costs ${(expected/10.0)}%1.2f") {
+        it (f"costs ${(expected/100.0)}%1.2f") {
           assert (result === expected)
         }
       }
