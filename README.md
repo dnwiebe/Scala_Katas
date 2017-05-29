@@ -1,4 +1,4 @@
-####Note
+#### Note
 There are several branches in this repository:
 * ```master```: Contains skeleton tests and skeleton production code for 
 each of the katas listed here. All the tests fail. You can use the
@@ -129,7 +129,7 @@ characters so that the pencil can write more periods than capital Ms
 before going dull.
 
 
-#Scoring Tennis
+# Scoring Tennis
 
 Test-drive some code to keep track of the score of a single
 tennis game and present it as String.
