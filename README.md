@@ -184,3 +184,11 @@ discard it and start from scratch if you don't like it.
 
 Poker ranking references are provided in many places on
 the Internet, including [this one.](http://www.cardplayer.com/rules-of-poker/hand-rankings)
+
+
+# Translating Names
+
+Test-drive a function that will accept a camel-cased name
+either beginningWithALowercaseCharacter or WithAnUppercaseOne,
+and produce a snake-cased version of that name, like
+beginning_with_a_lowercase_character or with_an_uppercase_one.
