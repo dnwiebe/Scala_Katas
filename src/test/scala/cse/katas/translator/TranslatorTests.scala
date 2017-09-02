@@ -14,28 +14,21 @@ class TranslatorTests extends path.FunSpec {
   describe ("A Translator") {
     val subject = new Translator ()
 
-    describe ("directed to translate an empty string") {
-      val result = subject.translate ("")
+    def check (description: String, input: String, output: String): Unit = {
+      describe (s"directed to translate a $description") {
+        val result = subject.translate (input)
 
-      it ("produces an empty string") {
-        assert (result === "")
+        it ("does so") {
+          assert (result === output)
+        }
       }
     }
 
-    describe ("directed to translate a simple capitalized string") {
-      val result = subject.translate ("Simple")
-
-      it ("produces a lowercased version") {
-        assert (result === "simple")
-      }
-    }
-
-    describe ("directed to translate a camelcased string with an abbreviation") {
-      val result = subject.translate ("ICalledTheAAAWhenMyCarBrokeDown")
-
-      it ("does so") {
-        assert (result === "i_called_the_aaa_when_my_car_broke_down")
-      }
-    }
+    check ("an empty string", "", "");
+    check ("a simple capitalized string", "Simple", "simple")
+    check ("a camelcased string with an abbreviation", "ICalledTheAAAWhenMyCarBrokeDown", "i_called_the_aaa_when_my_car_broke_down")
+    check ("a camelcased string that ends with a one-letter word", "TheLetterA", "the_letter_a")
+    check ("one character", "A", "a")
+    check ("a camel-cased string beginning with a lowercase letter", "camelCase", "camel_case")
   }
 }
