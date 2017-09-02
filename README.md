@@ -189,6 +189,6 @@ the Internet, including [this one.](http://www.cardplayer.com/rules-of-poker/han
 # Translating Names
 
 Test-drive a function that will accept a camel-cased name
-either beginningWithALowercaseCharacter or WithAnUppercaseOne,
+either `beginningWithALowercaseCharacter` or `WithAnUppercaseOne`,
 and produce a snake-cased version of that name, like
-beginning_with_a_lowercase_character or with_an_uppercase_one.
+`beginning_with_a_lowercase_character` or `with_an_uppercase_one`.
