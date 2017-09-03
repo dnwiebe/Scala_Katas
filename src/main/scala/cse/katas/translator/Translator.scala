@@ -14,12 +14,12 @@ class Translator {
   def translate (camelCase: String): String = {
     if (camelCase.isEmpty ()) {return ""}
     val adjusted = camelCase.head.toUpper + camelCase.tail + ' '
-    val withEdgeEffects = adjusted.foldLeft ((' ', ' ', "")) {(soFar, c) =>
+    val withEdgeEffects = adjusted.foldLeft (('a', 'a', "")) {(soFar, c) =>
       val (a, b, snakeCase) = soFar
-      (a.isUpper, b.isUpper, c.isUpper) match {
-        case (true, true, true) => withB (snakeCase, b, c)
-        case (_, false, _) => withB (snakeCase, b, c)
-        case (_, true, _) => with_B (snakeCase, b, c)
+      (a.isLower, b.isLower, c.isLower) match {
+        case (false, false, false) => withB (snakeCase, b, c)
+        case (_, true, _) => withB (snakeCase, b, c)
+        case (_, false, _) => with_B (snakeCase, b, c)
       }
     }._3
     withEdgeEffects.drop (2)

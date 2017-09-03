@@ -30,5 +30,6 @@ class TranslatorTests extends path.FunSpec {
     check ("a camelcased string that ends with a one-letter word", "TheLetterA", "the_letter_a")
     check ("one character", "A", "a")
     check ("a camel-cased string beginning with a lowercase letter", "camelCase", "camel_case")
+    check ("a string with non-letters", "Porsche911", "porsche_911")
   }
 }
