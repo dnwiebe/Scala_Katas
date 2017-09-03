@@ -54,8 +54,8 @@ class PencilTests extends path.FunSpec {
           describe ("and directed to write more") {
             val result = subject.write ("brought forth on this continent a new nation, conceived")
 
-            it ("writes 40 more characters and stops") {
-              assert (result === "brought forth on this continent a new nation, co       ")
+            it ("writes 43 more characters and stops") {
+              assert (result === "brought forth on this continent a new nation, conce    ")
             }
 
             describe ("and sharpened again and used to write even more, then sharpened a third time") {
@@ -73,6 +73,26 @@ class PencilTests extends path.FunSpec {
             }
           }
         }
+      }
+    }
+
+    describe ("directed to write a long non-dense string") {
+      val result = subject.write ("``````````````````````````````````````````````````````````````````````````````" +
+        "````````````````````````````````````````````````````````````````````````````````````````````````````````")
+
+      it ("writes fewer characters, but still rather a lot") {
+        assert (result ===        "``````````````````````````````````````````````````````````````````````````````" +
+        "``````````````````````````````````````````````````````````````````````````````````                      ")
+      }
+    }
+
+    describe ("directed to write a long dense string") {
+      val result = subject.write ("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB" +
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+
+      it ("writes very few characters") {
+        assert (result ===        "BBBBBBBBBBBBBBBBBBBBBBBB                                                      " +
+        "                                                                                                        ")
       }
     }
 
