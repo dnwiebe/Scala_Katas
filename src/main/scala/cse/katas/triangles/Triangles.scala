@@ -12,8 +12,6 @@ case object Isosceles extends Classification
 case object Other extends Classification
 
 object Triangles {
-  private val CLASSIFICATION_SEQUENCE = List (Equilateral, None, Isosceles, Right, Other)
-
   def classifySegments (a: Int, b: Int, c: Int): Classification = {
     val sortedList = List (a, b, c).sorted
     (sortedList(0), sortedList(1), sortedList(2)) match {
