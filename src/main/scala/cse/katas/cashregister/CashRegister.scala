@@ -13,24 +13,22 @@ case class CashRegister (drawer: WadOfCash) {
     }
     else {
       val newDrawer = drawer + payment
-      makeChange (changeDue, newDrawer, Twenty) match {
+      makeChange (changeDue, newDrawer, Some (Twenty)) match {
         case Some (change) => Result (Success, CashRegister (newDrawer - change))
         case None => Result (NoChange, this)
       }
     }
   }
 
-  private def makeChange (changeRemaining: Int, drawer: WadOfCash, denomination: Denomination): Option[WadOfCash] = {
-    denomination.next match {
-      case None => {
-        val count = Math.min (changeRemaining, drawer.count (Penny))
-        if (count < changeRemaining) {None} else {Some (WadOfCash.builder.add (Penny, count).build)}
-      }
-      case Some (nextDenomination) => {
+  private def makeChange (changeRemaining: Int, drawer: WadOfCash, denominationOpt: Option[Denomination]): Option[WadOfCash] = {
+    denominationOpt match {
+      case None => None
+      case Some (denomination) => {
         val count = Math.min (changeRemaining / denomination.value, drawer.count (denomination))
         val increment = WadOfCash.builder.add (denomination, count).build
+        if (changeRemaining == 0) {return Some (increment)}
         val nextDrawer = drawer - increment
-        makeChange (changeRemaining - (denomination.value * count), nextDrawer, nextDenomination) match {
+        makeChange (changeRemaining - (denomination.value * count), nextDrawer, denomination.next) match {
           case Some (nextChange) => Some (increment + nextChange)
           case None => None
         }
