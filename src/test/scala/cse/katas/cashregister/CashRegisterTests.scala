@@ -41,13 +41,100 @@ one quarter and five dimes. [credit: Tracy Harms]
 class CashRegisterTests extends path.FunSpec {
 
   describe ("A populated cash register") {
-    val subject = CashRegister (twenties = 1, singles = 10)
+    val drawer = WadOfCash.builder
+      .add (Twenty, 5)
+      .add (Ten, 5)
+      .add (Five, 5)
+      .add (Single, 5)
+      .add (Quarter, 5)
+      .add (Dime, 5)
+      .add (Nickel, 5)
+      .add (Penny, 5)
+      .build
+    val subject = CashRegister (drawer)
 
-    describe ("used for a transaction") {
-      val result = subject.transact (value = 2600, twenties = 2, singles = 0)
+    describe ("used for a successful transaction") {
+      val result = subject.transact (2600, WadOfCash.builder.add (Twenty, 2).build)
 
       it ("completes the transaction correctly") {
-        assert (result === Result (situation = Success, CashRegister (twenties = 3, singles = 6)))
+        assert (result === Result (situation = Success, CashRegister (WadOfCash.builder
+          .add (Twenty, 7)
+          .add (Ten, 4)
+          .add (Five, 5)
+          .add (Single, 1)
+          .add (Quarter, 5)
+          .add (Dime, 5)
+          .add (Nickel, 5)
+          .add (Penny, 5)
+          .build
+        )))
+      }
+    }
+
+    describe ("used for a successful transaction that requires part of the payment to be returned") {
+      val result = subject.transact (2600, WadOfCash.builder.add (Twenty, 10).build)
+
+      it ("completes the transaction correctly") {
+        assert (result === Result (situation = Success, CashRegister (WadOfCash.builder
+          .add (Twenty, 7)
+          .add (Ten, 4)
+          .add (Five, 5)
+          .add (Single, 1)
+          .add (Quarter, 5)
+          .add (Dime, 5)
+          .add (Nickel, 5)
+          .add (Penny, 5)
+          .build
+        )))
+      }
+    }
+
+    describe ("used for a non-sufficient-funds transaction") {
+      val result = subject.transact (2600, WadOfCash.builder
+        .add (Twenty, 1)
+        .add (Five, 1)
+        .add (Quarter, 3)
+        .add (Dime, 2)
+        .add (Penny, 4)
+        .build
+      )
+
+      it ("completes the transaction correctly") {
+        assert (result === Result (situation = Insufficient, CashRegister (drawer)))
+      }
+    }
+  }
+
+  describe ("A skinny cash register") {
+    val skinnyWad = WadOfCash.builder
+      .add (Twenty, 1)
+      .add (Ten, 1)
+      .add (Five, 1)
+      .add (Single, 1)
+      .add (Quarter, 1)
+      .add (Dime, 1)
+      .add (Nickel, 1)
+      .add (Penny, 1)
+      .build
+    val subject = CashRegister (skinnyWad)
+
+    describe ("used for a transaction requiring change") {
+      val result = subject.transact (2600, WadOfCash.builder.add (Twenty, 2).build)
+
+      it ("cannot complete the transaction") {
+        assert (result === Result (situation = NoChange, CashRegister (skinnyWad)))
+      }
+    }
+  }
+
+  describe ("An empty cash register") {
+    val subject = CashRegister (WadOfCash.builder.build)
+
+    describe ("used for a transaction requiring change") {
+      val result = subject.transact (2600, WadOfCash.builder.add (Twenty, 2).build)
+
+      it ("cannot complete the transaction") {
+        assert (result === Result (situation = NoChange, CashRegister (WadOfCash.builder.build)))
       }
     }
   }

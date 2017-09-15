@@ -7,3 +7,5 @@ package cse.katas.cashregister
 trait Situation
 
 object Success extends Situation
+object Insufficient extends Situation
+object NoChange extends Situation
