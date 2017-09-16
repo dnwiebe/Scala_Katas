@@ -28,9 +28,15 @@ case class CashRegister (drawer: WadOfCash) {
         val increment = WadOfCash.builder.add (denomination, count).build
         if (changeRemaining == 0) {return Some (increment)}
         val nextDrawer = drawer - increment
-        makeChange (changeRemaining - (denomination.value * count), nextDrawer, denomination.next) match {
-          case Some (nextChange) => Some (increment + nextChange)
+        val newChangeRemaining = changeRemaining - (denomination.value * count)
+        denomination.next match {
           case None => None
+          case Some (newDenomination) => {
+            makeChange (newChangeRemaining, nextDrawer, Some (newDenomination)) match {
+              case None => makeChange (newChangeRemaining, nextDrawer, newDenomination.next)
+              case Some (nextChange) => Some (increment + nextChange)
+            }
+          }
         }
       }
     }

@@ -57,7 +57,7 @@ class CashRegisterTests extends path.FunSpec {
       val result = subject.transact (2600, WadOfCash.builder.add (Twenty, 2).build)
 
       it ("completes the transaction correctly") {
-        assert (result === Result (situation = Success, CashRegister (WadOfCash.builder
+        assert (result === Result (Success, CashRegister (WadOfCash.builder
           .add (Twenty, 7)
           .add (Ten, 4)
           .add (Five, 5)
@@ -75,7 +75,7 @@ class CashRegisterTests extends path.FunSpec {
       val result = subject.transact (2600, WadOfCash.builder.add (Twenty, 10).build)
 
       it ("completes the transaction correctly") {
-        assert (result === Result (situation = Success, CashRegister (WadOfCash.builder
+        assert (result === Result (Success, CashRegister (WadOfCash.builder
           .add (Twenty, 7)
           .add (Ten, 4)
           .add (Five, 5)
@@ -100,7 +100,7 @@ class CashRegisterTests extends path.FunSpec {
       )
 
       it ("completes the transaction correctly") {
-        assert (result === Result (situation = Insufficient, CashRegister (drawer)))
+        assert (result === Result (Insufficient, CashRegister (drawer)))
       }
     }
   }
@@ -122,7 +122,7 @@ class CashRegisterTests extends path.FunSpec {
       val result = subject.transact (2600, WadOfCash.builder.add (Twenty, 2).build)
 
       it ("cannot complete the transaction") {
-        assert (result === Result (situation = NoChange, CashRegister (skinnyWad)))
+        assert (result === Result (NoChange, CashRegister (skinnyWad)))
       }
     }
   }
@@ -134,7 +134,7 @@ class CashRegisterTests extends path.FunSpec {
       val result = subject.transact (2600, WadOfCash.builder.add (Twenty, 2).build)
 
       it ("cannot complete the transaction") {
-        assert (result === Result (situation = NoChange, CashRegister (WadOfCash.builder.build)))
+        assert (result === Result (NoChange, CashRegister (WadOfCash.builder.build)))
       }
     }
   }
@@ -150,11 +150,10 @@ class CashRegisterTests extends path.FunSpec {
       val result = subject.transact (1950, WadOfCash.builder.add (Twenty, 1).build)
 
       it ("completes the transaction") {
-        assert (result === Result (situation = Success, CashRegister (WadOfCash.builder
-          .add (Twenty, 1)
-          .add (Quarter, 1)
-          .build))
-        )
+        assert (result.situation === Success)
+        assert (result.cashRegister.drawer.count (Twenty) === 1)
+        assert (result.cashRegister.drawer.count (Quarter) === 1)
+        assert (result.cashRegister.drawer.value === 2025)
       }
     }
   }
