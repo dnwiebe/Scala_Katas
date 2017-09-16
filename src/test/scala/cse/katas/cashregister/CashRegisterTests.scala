@@ -138,4 +138,24 @@ class CashRegisterTests extends path.FunSpec {
       }
     }
   }
+
+  describe ("A Tracy Harms cash register") {
+    val harmsWad = WadOfCash.builder
+      .add (Quarter, 1)
+      .add (Dime, 5)
+      .build
+    val subject = CashRegister (harmsWad)
+
+    describe ("used for a transaction requiring 50c change") {
+      val result = subject.transact (1950, WadOfCash.builder.add (Twenty, 1).build)
+
+      it ("completes the transaction") {
+        assert (result === Result (situation = Success, CashRegister (WadOfCash.builder
+          .add (Twenty, 1)
+          .add (Quarter, 1)
+          .build))
+        )
+      }
+    }
+  }
 }
